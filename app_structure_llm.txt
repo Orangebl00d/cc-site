@@ -1,0 +1,20 @@
+# App Structure - cc-site (built page)
+# Last updated: 2026-11-19
+
+## Repositories
+- GitHub: https://github.com/Orangebl00d/cc-site
+
+## Backend (Supabase)
+- None
+
+## Deployed Services
+- GitHub Pages (branch gh-pages, root): https://orangebl00d.github.io/cc-site/
+- Railway: none
+
+## Environment Variables Required
+- None
+
+## Notes
+- This repository holds only the built page. Nothing is edited here.
+- The page is kept locally and pushed to the gh-pages branch by a publish script.
+- The page asks search engines not to list it (a noindex tag and robots.txt).

@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Court Collective</title>
+<meta name="description" content="Court Collective works for the owner on court projects. We read every bid, put them on the same scope, and help you plan, build and run the venue.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1F6B4C">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 34'%3E%3Crect x='12' y='2' width='30' height='20' fill='%23fff' stroke='%2310231C' stroke-width='2'/%3E%3Crect x='7' y='7' width='30' height='20' fill='%23fff' stroke='%2310231C' stroke-width='2'/%3E%3Crect x='2' y='12' width='30' height='20' fill='%231F6B4C' stroke='%2310231C' stroke-width='2'/%3E%3Cpath d='M17 12v20M12 12v20M22 12v20M2 22h10M22 22h10' stroke='%23fff' stroke-width='1.4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Besley:wght@500;700;800&family=Kalam:wght@400;700&family=Libre+Franklin:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F7F4;      /* cool off-white */
+  --sheet:#FFFFFF;      /* bid paper */
+  --ink:#10231C;        /* near-black green */
+  --ink-2:#44524B;      /* gray-green text */
+  --line:#C9D3CC;       /* pale gray-green rule */
+  --court:#1F6B4C;      /* court green */
+  --blue:#234F7C;       /* court blue */
+  --ball:#E3F14E;       /* optic yellow, the highlighter */
+  --pencil:#B5371F;     /* red pencil, the reviewer */
+  --display:"Besley", Georgia, "Times New Roman", serif;
+  --text:"Libre Franklin", "Helvetica Neue", Arial, sans-serif;
+  --hand:"Kalam", "Bradley Hand", "Comic Sans MS", cursive;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font:400 17px/1.55 var(--text);
+  font-variant-numeric:lining-nums tabular-nums;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3,h4,p,ul,ol,dl,dd,figure{margin:0}
+ul,ol{padding:0;list-style:none}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px;box-shadow:0 0 0 6px var(--ball)}
+
+.wrap{max-width:1160px;margin-inline:auto;padding-inline:24px}
+.mark{
+  background:linear-gradient(transparent 10%, var(--ball) 10%, var(--ball) 90%, transparent 90%);
+  padding-inline:.14em;-webkit-box-decoration-break:clone;box-decoration-break:clone;
+}
+
+/* draft bar */
+.draftbar{display:none;background:var(--ball);color:var(--ink);font-size:.82rem;font-weight:600;text-align:center;padding:7px 16px}
+.is-draft .draftbar{display:block}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-block:20px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand svg{width:44px;height:34px;flex:none}
+.brand-name{font:800 1.3rem/1 var(--display);letter-spacing:-.01em}
+.top nav{display:flex;align-items:center;gap:28px}
+.top nav a{font-weight:500;font-size:.95rem;text-decoration:none}
+.top nav a:hover{text-decoration:underline;text-underline-offset:4px}
+
+.btn{
+  display:inline-block;font:600 1rem/1.2 var(--text);text-decoration:none;text-align:center;
+  padding:.85em 1.3em;border:2px solid var(--ink);border-radius:3px;color:var(--ink);background:transparent;cursor:pointer;
+}
+.btn:hover{background:var(--ink);color:#fff}
+.btn-solid{background:var(--ink);color:#fff}
+.btn-solid:hover{background:#000}
+.top nav .btn{font-size:.95rem;padding:.65em 1.05em}
+
+/* hero */
+.hero-head{padding-block:44px 44px}
+h1{font:800 clamp(2.3rem,4.3vw,3.75rem)/1.04 var(--display);letter-spacing:-.022em;text-wrap:balance}
+h1 span{display:block}
+.hero-sub{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-top:26px}
+.dek{font-size:1.2rem;line-height:1.5;color:var(--ink);max-width:50ch}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;flex:none}
+
+/* the desk: three bids lying on the court */
+.desk{position:relative;background:var(--court);color:#fff;padding-block:40px 52px;overflow:hidden}
+.desk::before{content:"";position:absolute;left:0;right:0;top:136px;height:4px;background:#fff}
+.desk .wrap{position:relative}
+.desk-bar{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:34px}
+.desk-title{font:700 1.35rem/1.2 var(--display)}
+.level{
+  font:700 1rem/1.2 var(--text);padding:.85em 1.3em;border:2px solid var(--ink);border-radius:3px;
+  background:var(--ball);color:var(--ink);cursor:pointer;
+}
+.level:hover{background:#fff}
+
+.sheets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:start}
+.sheet{
+  background:var(--sheet);color:var(--ink);border:1px solid var(--ink);padding:20px 20px 18px;
+  box-shadow:6px 7px 0 rgba(16,35,28,.34);
+  transition:transform .55s cubic-bezier(.2,.7,.2,1);
+}
+.sheet:nth-child(1){transform:rotate(-1deg) translateY(10px)}
+.sheet:nth-child(2){transform:rotate(.7deg) translateY(-4px)}
+.sheet:nth-child(3){transform:rotate(-.5deg) translateY(14px)}
+.is-leveled .sheet{transform:none}
+
+.sheet-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;border-bottom:2px solid var(--ink);padding-bottom:10px}
+.sheet-name{font:700 1.2rem/1.1 var(--display)}
+.tag{font-size:.74rem;font-weight:700;border:1.5px solid var(--ink);border-radius:2px;padding:2px 7px;white-space:nowrap}
+.tag[hidden]{display:none}
+.sheet-sub{font-size:.8rem;color:var(--ink-2);padding:8px 0 2px}
+
+.items li{padding:9px 0;border-bottom:1px dashed var(--line);font-size:.94rem;line-height:1.35}
+.note,.added{
+  font:700 1.04rem/1.25 var(--hand);color:var(--pencil);
+  opacity:0;visibility:hidden;max-height:0;overflow:hidden;
+  transition:opacity .3s ease, max-height .3s ease, padding .3s ease, visibility 0s linear .3s;
+}
+.note{display:block;transform:rotate(-.5deg);transform-origin:left center}
+.items li.added{padding-block:0;border-bottom-width:0}
+.is-leveled .note,.is-leveled .added{
+  opacity:1;visibility:visible;max-height:5em;
+  transition:opacity .35s ease calc(var(--i,0) * 70ms), max-height .35s ease calc(var(--i,0) * 70ms), padding .35s ease calc(var(--i,0) * 70ms), visibility 0s;
+}
+.is-leveled .note{padding-top:3px}
+.is-leveled .items li.added{padding-block:9px;border-bottom-width:1px}
+.added b{font-weight:700;white-space:nowrap}
+
+.total{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding-top:14px}
+.total-label{font-size:.8rem;font-weight:600;color:var(--ink-2);padding-bottom:4px}
+.amts{display:flex;flex-direction:column;align-items:flex-end;gap:4px;text-align:right}
+.amt{font:800 1.8rem/1 var(--display);letter-spacing:-.01em}
+.amt.now{display:none}
+.is-leveled .sheet.changed .amt.was{
+  font-size:1.05rem;color:var(--ink-2);
+  text-decoration:line-through;text-decoration-color:var(--pencil);text-decoration-thickness:2.5px;
+}
+.is-leveled .sheet.changed .amt.now{display:inline-block}
+.is-leveled .sheet.same .amt.was{background:linear-gradient(transparent 6%, var(--ball) 6%, var(--ball) 94%, transparent 94%);padding-inline:.14em}
+.amt.now{background:linear-gradient(transparent 6%, var(--ball) 6%, var(--ball) 94%, transparent 94%);padding-inline:.14em}
+
+.verdict{margin-top:34px;max-width:62ch;font-size:1.18rem;line-height:1.45;font-weight:500}
+.verdict b{color:var(--ball);font-weight:700}
+.fineprint{margin-top:6px;font-size:.86rem;opacity:.9}
+
+/* sections */
+.band{padding-block:92px}
+h2{font:700 clamp(1.8rem,3.5vw,2.8rem)/1.08 var(--display);letter-spacing:-.015em;text-wrap:balance}
+h3{font:700 1.22rem/1.2 var(--display)}
+.lede{font-size:1.14rem;max-width:60ch;margin-top:16px}
+.src{font-size:.84rem;color:var(--ink-2);margin-top:14px}
+
+/* receipt */
+.receipt-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:64px;align-items:center}
+.bars{display:grid;gap:14px}
+.bar-row{display:grid;grid-template-columns:8.2ch minmax(0,1fr);gap:16px;align-items:center}
+.bar-amt{font:700 1.2rem/1 var(--display);text-align:right}
+.bar{height:30px;background:var(--ink);width:calc(var(--w) * 1%);display:flex;align-items:center;justify-content:flex-end}
+.bar em{font-style:normal;font-size:.74rem;font-weight:700;color:var(--ink);background:var(--ball);padding:2px 7px;margin-right:6px;border-radius:2px;white-space:nowrap}
+.saying{font:700 clamp(1.5rem,3vw,2.3rem)/1.15 var(--display);letter-spacing:-.01em;max-width:24ch;margin-top:56px}
+
+/* ten lines */
+.lines{background:#fff;border-block:1px solid var(--line)}
+.lines dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:64px;margin-top:38px}
+.lines dl > div{padding:18px 0 20px;border-top:1px solid var(--line)}
+.lines dt{font:700 1.14rem/1.2 var(--display)}
+.lines dd{margin-top:5px;color:var(--ink-2);font-size:1rem}
+
+/* work */
+.work-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;margin-top:40px;padding-bottom:44px;border-bottom:2px solid var(--ink)}
+.work-main h3{font-size:clamp(1.6rem,2.6vw,2.1rem);line-height:1.1}
+.work-main p{margin-top:12px;font-size:1.1rem}
+.gets li{padding:11px 0 11px 30px;border-bottom:1px solid var(--line);position:relative}
+.gets li:first-child{border-top:1px solid var(--line)}
+.gets li::before{content:"";position:absolute;left:2px;top:17px;width:14px;height:8px;border-left:3px solid var(--court);border-bottom:3px solid var(--court);transform:rotate(-45deg)}
+.stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:44px;margin-top:44px}
+.stage > h3{font-size:1.4rem;line-height:1.3}
+.stage ul{margin-top:14px;border-top:2px solid var(--ink)}
+.stage li{padding:16px 0 18px;border-bottom:1px solid var(--line)}
+.stage h4{font:700 1.1rem/1.2 var(--display)}
+.stage li p{margin-top:6px;color:var(--ink-2)}
+
+/* paid */
+.paid{background:var(--blue);color:#fff}
+.paid-in{border:3px solid #fff;padding:clamp(28px,5vw,60px)}
+.paid ol{margin-top:30px}
+.paid ol li{font:700 clamp(1.35rem,2.7vw,2.1rem)/1.2 var(--display);padding:20px 0;border-top:2px solid rgba(255,255,255,.55)}
+.paid ol li:last-child{border-bottom:2px solid rgba(255,255,255,.55)}
+.paid p{margin-top:24px;max-width:58ch;font-size:1.06rem}
+
+/* who */
+.cols3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:44px;margin-top:40px}
+.cols3 > div{border-top:2px solid var(--ink);padding-top:18px}
+.cols3 p{margin-top:8px;color:var(--ink-2)}
+.cols3 .src{margin-top:10px}
+
+/* team */
+.team{background:#fff;border-block:1px solid var(--line)}
+.team h3{font-size:1.4rem}
+
+/* faq */
+.faq-list{margin-top:34px;border-top:2px solid var(--ink);max-width:880px}
+.faq-list details{border-bottom:1px solid var(--line)}
+.faq-list summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:20px;align-items:center;padding:18px 0;font:700 1.14rem/1.3 var(--display)}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary::after{content:"+";font:500 1.6rem/1 var(--text);flex:none}
+.faq-list details[open] summary::after{content:"\2212"}
+.faq-list details p{padding:0 0 20px;max-width:64ch;color:var(--ink-2)}
+
+/* send */
+.send{background:var(--court);color:#fff;text-align:left}
+.send h2{font-size:clamp(2.2rem,5vw,4rem)}
+.send p{margin-top:16px;font-size:1.16rem;max-width:52ch}
+.send .btn{margin-top:28px;background:var(--ball);border-color:var(--ink);color:var(--ink);font-weight:700}
+.send .btn:hover{background:#fff}
+.send .btn[aria-disabled="true"]{background:transparent;color:#fff;border:2px dashed #fff;cursor:default}
+.send-note{font-size:.88rem;margin-top:12px;opacity:.9}
+
+footer{padding-block:34px 44px;font-size:.88rem;color:var(--ink-2)}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+/* smaller screens */
+@media (max-width:1000px){
+  .hero-head{padding-block:32px 34px}
+  .hero-sub{flex-direction:column;align-items:flex-start;gap:20px}
+  .receipt-grid,.work-main{grid-template-columns:1fr;gap:36px}
+  .stages,.cols3{grid-template-columns:1fr;gap:34px}
+  .lines dl{grid-template-columns:1fr}
+}
+@media (max-width:880px){
+  .sheets{grid-template-columns:1fr;gap:20px}
+  .sheet:nth-child(n){transform:none}
+  .desk::before{top:auto;bottom:28px}
+  .top nav a:not(.btn){display:none}
+}
+@media (max-width:600px){
+  body{font-size:16px}
+  .wrap{padding-inline:16px}
+  .band{padding-block:60px}
+  .brand-name{font-size:1.12rem}
+  .brand svg{width:36px;height:28px}
+  .level{width:100%}
+  .bar-row{grid-template-columns:7.4ch minmax(0,1fr);gap:10px}
+  .bar-amt{font-size:1.02rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .sheet,.note,.added,.is-leveled .note,.is-leveled .added{transition:none}
+}
+@media print{
+  .draftbar,.level,.top nav{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="draftbar">Draft for review. Fees, bios and the building arm are placeholders until approved.</div>
+
+<header class="wrap top">
+  <a class="brand" href="#top" aria-label="Court Collective, home">
+    <svg viewBox="0 0 44 34" aria-hidden="true">
+      <rect x="12" y="2" width="30" height="20" fill="#fff" stroke="#10231C" stroke-width="2"/>
+      <rect x="7" y="7" width="30" height="20" fill="#fff" stroke="#10231C" stroke-width="2"/>
+      <rect x="2" y="12" width="30" height="20" fill="#1F6B4C" stroke="#10231C" stroke-width="2"/>
+      <path d="M17 12v20M12 12v20M22 12v20M2 22h10M22 22h10" stroke="#fff" stroke-width="1.4" fill="none"/>
+    </svg>
+    <span class="brand-name">Court Collective</span>
+  </a>
+  <nav aria-label="Main">
+    <a href="#review">Bid review</a>
+    <a href="#work">What we do</a>
+    <a href="#paid">How we're paid</a>
+    <a href="#team">Team</a>
+    <a class="btn btn-solid" href="#send">Send us your bids</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <section class="hero" aria-labelledby="h1">
+    <div class="wrap hero-head">
+      <h1 id="h1"><span>Three bids.</span><span>$178,000 apart.</span><span>One of them left out the drainage.</span></h1>
+      <div class="hero-sub">
+        <p class="dek">Court Collective reads every bid on your court project and puts them on the same scope. Your board votes on what each builder is really offering.</p>
+        <div class="hero-cta">
+          <a class="btn btn-solid" href="#send">Send us your bids</a>
+          <a class="btn" href="#review">What a review covers</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="desk" id="desk">
+      <div class="wrap">
+        <div class="desk-bar">
+          <div>
+            <p class="desk-title">Four pickleball courts. Three bids, as they arrived.</p>
+            <p class="fineprint">An example we made up to show the method. Your review uses your bids.</p>
+          </div>
+          <button class="level" id="level" type="button" aria-pressed="false">Put them on the same scope</button>
+        </div>
+
+        <div class="sheets">
+
+          <article class="sheet changed" data-bid="A">
+            <div class="sheet-top">
+              <h2 class="sheet-name">Builder A</h2>
+              <span class="tag" data-asbid>Lowest</span>
+              <span class="tag" data-leveled hidden>Was lowest</span>
+            </div>
+            <p class="sheet-sub">Proposal as written</p>
+            <ul class="items">
+              <li>Four courts, 4 in. reinforced concrete <span class="note" style="--i:0">the others: 5 in. post-tensioned</span></li>
+              <li>Acrylic color, 2 coats <span class="note" style="--i:1">no resurfacer coat</span></li>
+              <li>8 ft chain link fence <span class="note" style="--i:2">the others: 10 ft</span></li>
+              <li>Lighting allowance, $30,000 <span class="note" style="--i:3" data-add="34000">+ $34,000, the designed system is $64,000</span></li>
+              <li>Site work, drainage, power and permits by owner</li>
+              <li class="added" style="--i:4" data-add="38000"><b>+ $38,000</b> site prep</li>
+              <li class="added" style="--i:5" data-add="41000"><b>+ $41,000</b> drainage</li>
+              <li class="added" style="--i:6" data-add="36500"><b>+ $36,500</b> power to the courts</li>
+              <li class="added" style="--i:7" data-add="18000"><b>+ $18,000</b> permits and stamped drawings</li>
+              <li class="added" style="--i:8" data-add="6500"><b>+ $6,500</b> soils report, never mentioned</li>
+              <li>Warranty not stated <span class="note" style="--i:9">get it in writing</span></li>
+            </ul>
+            <div class="total">
+              <span class="total-label">Total</span>
+              <span class="amts"><span class="amt was" data-v="412000">$412,000</span><span class="amt now" data-v="586000">$586,000</span></span>
+            </div>
+          </article>
+
+          <article class="sheet changed" data-bid="B">
+            <div class="sheet-top">
+              <h2 class="sheet-name">Builder B</h2>
+              <span class="tag" data-leveled hidden>Lowest for the same job</span>
+            </div>
+            <p class="sheet-sub">Proposal as written</p>
+            <ul class="items">
+              <li>Four courts, 5 in. post-tensioned concrete</li>
+              <li>Resurfacer plus 2 color coats</li>
+              <li>10 ft chain link fence</li>
+              <li>LED lighting with a photometric plan</li>
+              <li>Site prep, perimeter drainage, power and permits included</li>
+              <li>Excluded: soils report, stamped drawings</li>
+              <li class="added" style="--i:2" data-add="6500"><b>+ $6,500</b> soils report</li>
+              <li class="added" style="--i:3" data-add="9000"><b>+ $9,000</b> stamped drawings</li>
+              <li>Warranty, 1 year</li>
+            </ul>
+            <div class="total">
+              <span class="total-label">Total</span>
+              <span class="amts"><span class="amt was" data-v="498500">$498,500</span><span class="amt now" data-v="514000">$514,000</span></span>
+            </div>
+          </article>
+
+          <article class="sheet same" data-bid="C">
+            <div class="sheet-top">
+              <h2 class="sheet-name">Builder C</h2>
+              <span class="tag" data-asbid>Highest</span>
+              <span class="tag" data-leveled hidden>Nothing missing</span>
+            </div>
+            <p class="sheet-sub">Proposal as written</p>
+            <ul class="items">
+              <li>Four courts, 5 in. post-tensioned concrete, engineered</li>
+              <li>2 resurfacer coats plus 2 color coats</li>
+              <li>10 ft chain link fence</li>
+              <li>LED lighting with a photometric plan</li>
+              <li>Soils report, stamped drawings and permits included</li>
+              <li>Site prep, drainage with storm tie-in, and power included</li>
+              <li>Warranty, 2 years <span class="note" style="--i:4">the longest of the three</span></li>
+            </ul>
+            <div class="total">
+              <span class="total-label">Total</span>
+              <span class="amts"><span class="amt was" data-v="590000">$590,000</span></span>
+            </div>
+          </article>
+
+        </div>
+
+        <p class="verdict" id="verdict" aria-live="polite">As bid, Builder A is the low number by <b>$86,500</b>. The three are <b>$178,000</b> apart.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band receipt" aria-labelledby="receipt-h">
+    <div class="wrap">
+      <div class="receipt-grid">
+        <div>
+          <h2 id="receipt-h">Same court. Four prices.</h2>
+          <p class="lede">In 2024 Lake County, Florida put one concrete sport court out to bid. One written scope, four builders. The high price was 2.2 times the low one.</p>
+          <p class="lede">That county wrote the scope before anyone priced it. When each builder writes their own, the prices stop describing the same court.</p>
+          <p class="src">Source: Lake County bid 24-524, <a href="https://c.lakecountyfl.gov/ProcurementDocuments/24-524_24-524PriceTabulationSheet.pdf" rel="noopener">price tabulation sheet</a>, base bid, May 2024.</p>
+        </div>
+        <div class="bars" role="img" aria-label="Four bids for the same court: $161,810, $199,420, $237,388 and $359,285.">
+          <div class="bar-row"><span class="bar-amt">$161,810</span><span class="bar" style="--w:45.04"><em>low</em></span></div>
+          <div class="bar-row"><span class="bar-amt">$199,420</span><span class="bar" style="--w:55.5"></span></div>
+          <div class="bar-row"><span class="bar-amt">$237,388</span><span class="bar" style="--w:66.07"></span></div>
+          <div class="bar-row"><span class="bar-amt">$359,285</span><span class="bar" style="--w:100"><em>high</em></span></div>
+        </div>
+      </div>
+      <p class="saying">A low bid is only low for the job it describes.</p>
+    </div>
+  </section>
+
+  <section class="band lines" id="review" aria-labelledby="lines-h">
+    <div class="wrap">
+      <h2 id="lines-h">Ten lines we read in every bid</h2>
+      <p class="lede">The full scorecard has thirty. These ten move the price the most, and each one has a published standard behind it or a question the builder has to answer in writing.</p>
+      <dl>
+        <div><dt>Soils report</dt><dd>The court builders' trade association recommends a soils investigation because it cuts change orders. If no bid includes one, ask who pays when the excavator hits bad ground.</dd></div>
+        <div><dt>The slab</dt><dd>Asphalt, reinforced concrete and post-tensioned concrete are three different courts at three different prices. A bid that says "concrete court" with no thickness hasn't told you which one you're buying.</dd></div>
+        <div><dt>Cure and moisture</dt><dd>Laykold's published spec gives new concrete at least 30 days before coating, with a moisture test first. A schedule that coats sooner needs a primer line in the price.</dd></div>
+        <div><dt>Coats</dt><dd>The same spec calls for one or two coats of resurfacer, two coats of color, then lines. Count the coats in each bid.</dd></div>
+        <div><dt>Flat and drained</dt><dd>No more than a quarter inch of deviation under a 10 foot straightedge. Ask every builder for the slope as a number and the test they run before they coat.</dd></div>
+        <div><dt>Power</dt><dd>Someone has to bring electricity from the meter to the courts. Check each bid for who, how far and how much.</dd></div>
+        <div><dt>Permits and stamped drawings</dt><dd>Who pulls the permit and who pays the engineer. If the answer is "by owner," it comes out of your budget.</dd></div>
+        <div><dt>Warranty</dt><dd>Years, what it covers, what voids it, and the day it starts. All four in writing.</dd></div>
+        <div><dt>Padel glass and height</dt><dd>The federation's rules call for a 10 by 20 meter court with at least 6 meters of clear height. The UK governing body's guidance calls for 12 mm tempered glass outdoors.</dd></div>
+        <div><dt>Noise</dt><dd>If homes are close, ask for the barrier's tested rating in writing, or an acoustic study.</dd></div>
+      </dl>
+      <p class="src">Sources: ASBA-sponsored bid guidance (SportsField Management, September 2025). Laykold Advantage System Specification (2023). FIP Rules of Padel (December 2025). LTA padel court construction guidance (2025).</p>
+    </div>
+  </section>
+
+  <section class="band" id="work" aria-labelledby="work-h">
+    <div class="wrap">
+      <h2 id="work-h">What we do</h2>
+      <p class="lede">The bid review is the fastest way to use us. The rest runs from the first look at a site to a club that is already open.</p>
+      <div class="work-main">
+        <div>
+          <h3>Review the bids</h3>
+          <p>Send us every bid as the builder sent it. You get back a short memo your board can read and a report that stands behind it.</p>
+        </div>
+        <ul class="gets">
+          <li>Every bid on the same scope, line by line</li>
+          <li>Each gap priced, so the totals can be compared</li>
+          <li>Written questions for each builder, and their answers</li>
+          <li>A two-page memo your board can vote from</li>
+          <li>A walk-through with your committee</li>
+        </ul>
+      </div>
+      <div class="stages">
+        <div class="stage">
+          <h3><span class="mark">Before you build</span></h3>
+          <ul>
+            <li>
+              <h4>Feasibility</h4>
+              <p>Should you build, where, and how many courts. We read the site, the lease, the market around it and the numbers. You get a yes or a no, with the reasons.</p>
+            </li>
+            <li>
+              <h4>Design and budget</h4>
+              <p>Court count, layout, which way the courts face, sound, lighting, and where people sit. Renderings your members can react to and a budget with every line priced.</p>
+            </li>
+            <li>
+              <h4>Business plan</h4>
+              <p>Membership and court pricing, programming, staffing, and a pro forma a lender or a board can read.</p>
+            </li>
+          </ul>
+        </div>
+        <div class="stage">
+          <h3><span class="mark">When you buy</span></h3>
+          <ul>
+            <li>
+              <h4>Run the bid</h4>
+              <p>No bids yet. We write the scope, invite the builders and level what comes back. Same for the lighting, the booking software and the rest of what you have to buy.</p>
+            </li>
+            <li>
+              <h4>Run the job</h4>
+              <p>We stay through construction as your representative. We read the pay applications and the change orders, stand at the pour and walk the punch list.</p>
+            </li>
+            <li>
+              <h4>Build it</h4>
+              <p>Court Collective Construction is our building arm, now being set up. One contract, one warranty, and you see the trade bids. Until it is licensed in your state, a licensed builder holds the contract and we represent you.</p>
+            </li>
+          </ul>
+        </div>
+        <div class="stage">
+          <h3><span class="mark">Once you're open</span></h3>
+          <ul>
+            <li>
+              <h4>Opening</h4>
+              <p>Hiring and training, the first programming calendar, the brand and the website, and the weeks before the doors open.</p>
+            </li>
+            <li>
+              <h4>Club audit</h4>
+              <p>For a club that is already running. We go through the books, payroll, staffing, programming, pricing and court use, and hand you the list of what to change first.</p>
+            </li>
+            <li>
+              <h4>Leases, insurance and utilities</h4>
+              <p>Three contracts that decide whether a club makes money. Rene Prats reads yours the way he reads his own.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band paid" id="paid" aria-labelledby="paid-h">
+    <div class="wrap">
+      <div class="paid-in">
+        <h2 id="paid-h">How we're paid</h2>
+        <ol>
+          <li>A flat fee, set before we start.</li>
+          <li>The same fee whichever builder you pick.</li>
+          <li>Credited back if you build with us.</li>
+        </ol>
+        <p>We take nothing from builders or vendors. If anyone ever pays us for a referral, the money goes to you and you see it in writing.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="who-h">
+    <div class="wrap">
+      <h2 id="who-h">Who this is for</h2>
+      <div class="cols3">
+        <div>
+          <h3>Country clubs</h3>
+          <p>The board approved a number. Change orders come after the vote, and the general manager is the one who goes back to ask for more.</p>
+        </div>
+        <div>
+          <h3>Pickleball and padel clubs</h3>
+          <p>Your rent starts on a date. A court that fails inspection or cracks in its first year doesn't move that date.</p>
+        </div>
+        <div>
+          <h3>HOAs and communities</h3>
+          <p>Florida makes a homeowners association get competitive bids once a contract passes 10% of the annual budget. The same section says the board doesn't have to take the lowest one. Someone still has to say why.</p>
+          <p class="src">Florida Statutes <a href="https://m.flsenate.gov/Statutes/720.3055" rel="noopener">720.3055</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band team" id="team" aria-labelledby="team-h">
+    <div class="wrap">
+      <h2 id="team-h">Who reads your bids</h2>
+      <div class="cols3">
+        <div>
+          <h3>Brooks Wiley</h3>
+          <p>Co-founder and commissioner of Major League Pickleball, where he set what a championship venue has to be. First CEO of DUPR, the rating system clubs use to fill courts with level play. He has spent the years since on the building side of the sport.</p>
+        </div>
+        <div>
+          <h3>Matt Rineberg</h3>
+          <p>Six years at Har-Tru, the court surface maker, then sales lead for a national court builder. He has written the kind of bids you're holding, so he knows which lines get left out.</p>
+        </div>
+        <div>
+          <h3>Rene Prats</h3>
+          <p>Co-founder of Diadem Pickleball Complexes, the Florida indoor clubs that started with nine courts inside a Broward College auditorium. He signs the leases, the insurance and the utility contracts for his own clubs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="faq-h">
+    <div class="wrap">
+      <h2 id="faq-h">Fair questions</h2>
+      <div class="faq-list">
+        <details>
+          <summary>You're setting up a building arm. How is the review independent?</summary>
+          <p>We never bid against a builder whose bid we've read. Our fee is fixed before you sign and is the same whichever builder wins. When our building arm holds a contract, the builder you chose still does the work.</p>
+        </details>
+        <details>
+          <summary>We haven't decided whether to build. Is it too early?</summary>
+          <p>No. Start with feasibility. You get a yes or a no before you spend on drawings.</p>
+        </details>
+        <details>
+          <summary>Our club is already open. What can you do?</summary>
+          <p>A club audit. We go through the books, staffing, programming and pricing, then the lease, the insurance and the utility bills.</p>
+        </details>
+        <details>
+          <summary>What does a review cost?</summary>
+          <p>A flat fee based on the size of the project. You get the number before we start.</p>
+        </details>
+        <details>
+          <summary>What do you need from us?</summary>
+          <p>Every bid as the builder sent it, any drawings or site plan, the budget your board approved, and the date you have to decide.</p>
+        </details>
+        <details>
+          <summary>Do the builders know you're reviewing?</summary>
+          <p>Yes. Each one gets the same written questions and a chance to answer before the report goes to your board.</p>
+        </details>
+        <details>
+          <summary>We already picked a builder. Is it too late?</summary>
+          <p>We read the contract before you sign it. We can also stay through construction as your representative.</p>
+        </details>
+        <details>
+          <summary>Where do you work?</summary>
+          <p>Reviews and owner's representation anywhere in the United States.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="band send" id="send" aria-labelledby="send-h">
+    <div class="wrap">
+      <h2 id="send-h">Send us the bids.</h2>
+      <p>Every bid, as the builder sent it. Any drawings. The date you have to decide. We'll come back with what a full review covers and what it costs.</p>
+      <a class="btn" id="send-btn" href="#send">Email your bids</a>
+      <p class="send-note" id="send-note"></p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Court Collective. We work for the owner.</span>
+    <span>2026</span>
+  </div>
+</footer>
+
+<script>
+/* Two switches. Flip DRAFT to false and set CONTACT_EMAIL when the site is cleared to go live. */
+const DRAFT = true;
+const CONTACT_EMAIL = "";
+
+document.documentElement.classList.toggle("is-draft", DRAFT);
+
+/* contact */
+(function () {
+  const btn = document.getElementById("send-btn");
+  const note = document.getElementById("send-note");
+  if (CONTACT_EMAIL) {
+    btn.href = "mailto:" + CONTACT_EMAIL + "?subject=" + encodeURIComponent("Bids for review");
+  } else {
+    btn.setAttribute("aria-disabled", "true");
+    btn.removeAttribute("href");
+    btn.textContent = "Email address not set yet";
+    note.textContent = "Draft: the address goes here once the domain exists.";
+  }
+})();
+
+/* the bid tab */
+(function () {
+  const desk = document.getElementById("desk");
+  const btn = document.getElementById("level");
+  const verdict = document.getElementById("verdict");
+  const title = desk.querySelector(".desk-title");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const fmt = (n) => "$" + Math.round(n).toLocaleString("en-US");
+
+  /* check the arithmetic on every sheet so a copy edit can't break the totals */
+  const totals = {};
+  desk.querySelectorAll(".sheet").forEach((s) => {
+    const was = Number(s.querySelector(".amt.was").dataset.v);
+    const nowEl = s.querySelector(".amt.now");
+    const now = nowEl ? Number(nowEl.dataset.v) : was;
+    let add = 0;
+    s.querySelectorAll("[data-add]").forEach((el) => (add += Number(el.dataset.add)));
+    console.assert(was + add === now, "Bid " + s.dataset.bid + " does not add up", was, add, now);
+    totals[s.dataset.bid] = { was, now };
+  });
+  const asBid = Object.values(totals).map((t) => t.was);
+  console.assert(Math.max(...asBid) - Math.min(...asBid) === 178000, "Headline spread is off");
+
+  const TEXT = {
+    asbid: {
+      button: "Put them on the same scope",
+      title: "Four pickleball courts. Three bids, as they arrived.",
+      verdict: "As bid, Builder A is the low number by <b>" + fmt(totals.B.was - totals.A.was) + "</b>. The three are <b>" + fmt(totals.C.was - totals.A.was) + "</b> apart.",
+    },
+    leveled: {
+      button: "Show them as bid",
+      title: "The same three bids, on the same scope.",
+      verdict: "On the same scope, Builder B is the low number at <b>" + fmt(totals.B.now) + "</b>. Builder A comes to <b>" + fmt(totals.A.now) + "</b> and still has the thinner slab, the shorter fence and no written warranty.",
+    },
+  };
+
+  function count(el, from, to) {
+    if (reduce) { el.textContent = fmt(to); return; }
+    const t0 = performance.now(), ms = 800;
+    (function frame(t) {
+      const k = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - k, 3);
+      el.textContent = fmt(Math.round((from + (to - from) * e) / 500) * 500);
+      if (k < 1) requestAnimationFrame(frame); else el.textContent = fmt(to);
+    })(t0);
+  }
+
+  btn.addEventListener("click", () => {
+    const on = !desk.classList.contains("is-leveled");
+    desk.classList.toggle("is-leveled", on);
+    btn.setAttribute("aria-pressed", String(on));
+    const t = on ? TEXT.leveled : TEXT.asbid;
+    btn.textContent = t.button;
+    title.textContent = t.title;
+    verdict.innerHTML = t.verdict;
+    desk.querySelectorAll("[data-asbid]").forEach((el) => (el.hidden = on));
+    desk.querySelectorAll("[data-leveled]").forEach((el) => (el.hidden = !on));
+    if (on) {
+      desk.querySelectorAll(".sheet.changed").forEach((s) => {
+        const b = totals[s.dataset.bid];
+        count(s.querySelector(".amt.now"), b.was, b.now);
+      });
+    }
+  });
+})();
+</script>
+</body>
+</html>
